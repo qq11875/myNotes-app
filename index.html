@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MyNotes</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  <div class="app">
+    <h1>MyNotes</h1>
+    <form id="note-form">
+      <input type="text" id="note-text" placeholder="Write your note..." required/>
+      <input type="text" id="note-tags" placeholder="Tags (comma-separated)"/>
+      <button type="submit">Add Note</button>
+    </form>
+    
+    <input type="text" id="search" placeholder="Search notes..."/>
+
+    <ul id="notes-list"></ul>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

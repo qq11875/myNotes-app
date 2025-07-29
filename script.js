@@ -1,0 +1,54 @@
+const form = document.getElementById("note-form");
+const notesList = document.getElementById("notes-list");
+const searchInput = document.getElementById("search");
+
+let notes = JSON.parse(localStorage.getItem("notes")) || [];
+
+form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const text = document.getElementById("note-text").value.trim();
+    const tags = document.getElementById("note-tags").value.trim().split(",").map(t => t.trim()).filter(t => t !== "");
+
+    if (text) {
+        notes.push({text, tags});
+        saveNotes();
+        form.reset();
+        renderNotes(notes);
+    }
+});
+
+searchInput.addEventListener("input", () => {
+    const query = searchInput.value.toLowerCase();
+    const filtered  = notes.filter((note) => 
+        note.text.toLowerCase().includes(query) ||
+        note.tags.some((tag) => tag.toLowerCase().includes(query))
+    );
+    renderNotes(filtered);
+});
+
+function saveNotes() {
+    localStorage.setItem("notes", JSON.stringify(notes));
+}
+
+function renderNotes(notesToRender) {
+    notesList.innerHTML = "";
+    notesToRender.forEach((note) => {
+        const li = document.createElement("li");
+        const text = document.createElement("p");
+        text.textContent = note.text;
+
+        const tagsDiv = document.createElement("div");
+        note.tags.forEach((tag) => {
+            const span = document.createElement("span");
+            span.className = "tag";
+            span.textContent = `#${tag}`;
+            tagsDiv.appendChild(span);
+        });
+
+        li.appendChild(text);
+        li.appendChild(tagsDiv);
+        notesList.appendChild(li);
+    });
+}
+
+renderNotes(notes);
