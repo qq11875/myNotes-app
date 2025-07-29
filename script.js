@@ -30,8 +30,22 @@ function saveNotes() {
     localStorage.setItem("notes", JSON.stringify(notes));
 }
 
+function showClearFilter() {
+    const btn = document.createElement("button");
+    btn.textContent = "Clear Filter";
+    btn.style.marginBottom = "10px";
+    btn.addEventListener("click", () => {
+        renderNotes(notes);
+    });
+
+    const container = document.getElementById("filter-controls");
+    container.appendChild(btn);
+}
+
 function renderNotes(notesToRender) {
     notesList.innerHTML = "";
+    document.getElementById("filter-controls").innerHTML = "";
+
     notesToRender.forEach((note) => {
         const li = document.createElement("li");
         const text = document.createElement("p");
@@ -42,6 +56,12 @@ function renderNotes(notesToRender) {
             const span = document.createElement("span");
             span.className = "tag";
             span.textContent = `#${tag}`;
+            span.style.cursor = "pointer";
+            span.addEventListener("click", () => {
+                const filtered = notes.filter(n => n.tags.includes(tag));
+                renderNotes(filtered);
+                showClearFilter();
+            });
             tagsDiv.appendChild(span);
         });
 
@@ -59,6 +79,8 @@ function renderNotes(notesToRender) {
                 renderNotes(notes);
             }
         });
+
+        
 
         li.appendChild(text);
         li.appendChild(tagsDiv);
