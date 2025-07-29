@@ -45,8 +45,24 @@ function renderNotes(notesToRender) {
             tagsDiv.appendChild(span);
         });
 
+        const deleteBtn = document.createElement("button");
+        deleteBtn.textContent = "Delete";
+        deleteBtn.className = "delete-button"
+        deleteBtn.addEventListener("click", () => {
+            const fullIndex = notes.findIndex(n =>
+                n.text === note.text &&
+                JSON.stringify(n.tags) === JSON.stringify(note.tags)
+            );
+            if (fullIndex !== -1) {
+                notes.splice(fullIndex, 1);
+                saveNotes();
+                renderNotes(notes);
+            }
+        });
+
         li.appendChild(text);
         li.appendChild(tagsDiv);
+        li.appendChild(deleteBtn);
         notesList.appendChild(li);
     });
 }
