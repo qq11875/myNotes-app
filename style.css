@@ -37,6 +37,12 @@ button {
     cursor: pointer;
 }
 
+.note-buttons {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+}
+
 #filter-controls button {
     background-color: #f8d7da;
     color: #721c24;
@@ -65,6 +71,20 @@ button {
   background-color: #d32f2f;
 }
 
+.edit-button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    margin-top: 5px;
+    border-radius: 4px;
+    padding: 6px 12px;
+    cursor: pointer;
+}
+
+.edit-button:hover {
+    background-color: #218838;
+}
 
 #search {
     margin-bottom: 20px;

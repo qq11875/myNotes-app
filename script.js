@@ -42,11 +42,45 @@ function showClearFilter() {
     container.appendChild(btn);
 }
 
+function startEditNote(index) {
+    const note = notes[index];
+
+    const li = document.createElement("li");
+
+    const textInput = document.createElement("input");
+    textInput.type = "text";
+    textInput.value = note.text;
+    textInput.className = "edit-input";
+
+    const tagsInput = document.createElement("input");
+    tagsInput.type = "text";
+    tagsInput.value = note.tags.join(", ");
+    tagsInput.className = "edit-input";
+
+    const saveBtn = document.createElement("button");
+    saveBtn.textContent = "Save";
+    saveBtn.addEventListener("click", () => {
+        const newText = textInput.value.trim();
+        const newTags = tagsInput.value.trim().split(",").map(t => t.trim()).filter(t => t !== "");
+        if (newText) {
+            notes[index] = {text: newText, tags: newTags};
+            saveNotes();
+            renderNotes(notes);
+        }
+    });
+
+    li.appendChild(textInput);
+    li.appendChild(tagsInput);
+    li.appendChild(saveBtn);
+
+    notesList.replaceChild(li, notesList.children[index]);
+}
+
 function renderNotes(notesToRender) {
     notesList.innerHTML = "";
     document.getElementById("filter-controls").innerHTML = "";
 
-    notesToRender.forEach((note) => {
+    notesToRender.forEach((note, index) => {
         const li = document.createElement("li");
         const text = document.createElement("p");
         text.textContent = note.text;
@@ -80,11 +114,20 @@ function renderNotes(notesToRender) {
             }
         });
 
+        const editBtn = document.createElement("button");
+        editBtn.textContent = "Edit";
+        editBtn.className = "edit-button";
+        editBtn.addEventListener("click", () => startEditNote(index));
+        
+        const btns = document.createElement("div");
+        btns.className = "note-buttons";
+        btns.appendChild(editBtn);
+        btns.appendChild(deleteBtn);
         
 
         li.appendChild(text);
         li.appendChild(tagsDiv);
-        li.appendChild(deleteBtn);
+        li.appendChild(btns);
         notesList.appendChild(li);
     });
 }
