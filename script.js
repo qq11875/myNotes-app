@@ -10,7 +10,7 @@ form.addEventListener("submit", (e) => {
     const tags = document.getElementById("note-tags").value.trim().split(",").map(t => t.trim()).filter(t => t !== "");
 
     if (text) {
-        notes.push({text, tags});
+        notes.push({text, tags, pinned: false});
         saveNotes();
         form.reset();
         renderNotes(notes);
@@ -80,6 +80,8 @@ function renderNotes(notesToRender) {
     notesList.innerHTML = "";
     document.getElementById("filter-controls").innerHTML = "";
 
+    notesToRender.sort((a, b) => (b.pinned === true) - (a.pinned === true));
+
     notesToRender.forEach((note, index) => {
         const li = document.createElement("li");
         const text = document.createElement("p");
@@ -97,6 +99,15 @@ function renderNotes(notesToRender) {
                 showClearFilter();
             });
             tagsDiv.appendChild(span);
+        });
+
+        const pinBtn = document.createElement("button");
+        pinBtn.textContent = note.pinned ? "Unpin": "Pin";
+        pinBtn.className = "pin-button";
+        pinBtn.addEventListener("click", () => {
+            notes[index].pinned = !notes[index].pinned;
+            saveNotes();
+            renderNotes(notes);
         });
 
         const deleteBtn = document.createElement("button");
@@ -121,6 +132,7 @@ function renderNotes(notesToRender) {
         
         const btns = document.createElement("div");
         btns.className = "note-buttons";
+        btns.appendChild(pinBtn);
         btns.appendChild(editBtn);
         btns.appendChild(deleteBtn);
         
