@@ -8,9 +8,10 @@ form.addEventListener("submit", (e) => {
     e.preventDefault();
     const text = document.getElementById("note-text").value.trim();
     const tags = document.getElementById("note-tags").value.trim().split(",").map(t => t.trim()).filter(t => t !== "");
+    const color = document.getElementById("note-color").value;
 
     if (text) {
-        notes.push({text, tags, pinned: false});
+        notes.push({text, tags, pinned: false, color});
         saveNotes();
         form.reset();
         renderNotes(notes);
@@ -57,13 +58,31 @@ function startEditNote(index) {
     tagsInput.value = note.tags.join(", ");
     tagsInput.className = "edit-input";
 
+    const colorOptions = {
+        "#fff8b3": "Yellow",
+        "#b3ffd9": "Mint",
+        "#fddde6": "Pink",
+        "#d1ecf1": "Blue"
+    };
+
+    const colorSelect = document.createElement("select");
+    colorSelect.className = "edit-color-select";
+    Object.entries(colorOptions).forEach(([hex, name]) => {
+        const option = document.createElement("option");
+        option.value = hex;
+        option.textContent = name;
+        if (note.color === hex) option.selected = true;
+        colorSelect.append(option)
+    });
+
     const saveBtn = document.createElement("button");
     saveBtn.textContent = "Save";
     saveBtn.addEventListener("click", () => {
         const newText = textInput.value.trim();
         const newTags = tagsInput.value.trim().split(",").map(t => t.trim()).filter(t => t !== "");
+        const newColor = colorSelect.value;
         if (newText) {
-            notes[index] = {text: newText, tags: newTags};
+            notes[index] = {text: newText, tags: newTags, color: newColor};
             saveNotes();
             renderNotes(notes);
         }
@@ -71,6 +90,7 @@ function startEditNote(index) {
 
     li.appendChild(textInput);
     li.appendChild(tagsInput);
+    li.appendChild(colorSelect);
     li.appendChild(saveBtn);
 
     notesList.replaceChild(li, notesList.children[index]);
@@ -136,7 +156,7 @@ function renderNotes(notesToRender) {
         btns.appendChild(editBtn);
         btns.appendChild(deleteBtn);
         
-
+        li.style.backgroundColor = note.color || "#f2f2f2";
         li.appendChild(text);
         li.appendChild(tagsDiv);
         li.appendChild(btns);
