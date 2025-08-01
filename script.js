@@ -18,6 +18,13 @@ form.addEventListener("submit", (e) => {
     }
 });
 
+const colorSelect = document.getElementById('note-color');
+colorSelect.style.backgroundColor = colorSelect.value;
+
+colorSelect.addEventListener('change', () => {
+  colorSelect.style.backgroundColor = colorSelect.value;
+});
+
 searchInput.addEventListener("input", () => {
     const query = searchInput.value.toLowerCase();
     const filtered  = notes.filter((note) => 
@@ -70,9 +77,13 @@ function startEditNote(index) {
     Object.entries(colorOptions).forEach(([hex, name]) => {
         const option = document.createElement("option");
         option.value = hex;
-        option.textContent = name;
+        option.style = "background-color: " + hex;
         if (note.color === hex) option.selected = true;
         colorSelect.append(option)
+    });
+    colorSelect.style.backgroundColor = colorSelect.value;
+    colorSelect.addEventListener('change', () => {
+    colorSelect.style.backgroundColor = colorSelect.value;
     });
 
     const saveBtn = document.createElement("button");
